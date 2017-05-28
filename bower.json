@@ -1,0 +1,27 @@
+{
+  "name": "mean-single-page",
+  "description": "This is a single page mean application to track expense",
+  "main": "server.js",
+  "authors": [
+    "John P Komban"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "mean",
+    "single-page",
+    "expense"
+  ],
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "^1.6.4",
+    "angular-route": "^1.6.4"
+  }
+}

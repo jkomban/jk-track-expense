@@ -1,0 +1,111 @@
+<!-- public/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <base href="/api"> -->
+
+    <title>Track It!</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="bootstrap.min.css">  
+	<link rel="icon" href="images/favicon.ico">
+
+    <!-- JS  -->
+	<script src="vendor/angular/angular.js">  </script>
+	<script src="vendor/angular-route/angular-route.js"> </script>
+    <!-- ANGULAR CUSTOM -->
+    <script src="mainCtrl.js"></script>
+    <script src="core.js"></script>
+
+</head>
+<body ng-app="uiExpense" >
+<div class="container"  ng-controller="mainController">
+    <!-- HEADER -->
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <a class="navbar-brand" > Track Expense</a>
+        </div>
+
+        <!-- LINK TO OUR PAGES. ANGULAR HANDLES THE ROUTING HERE -->
+        <ul class="nav navbar-nav" id="nav-bar-home">
+            <li><a ng-click="changeTabValue(1)" >Home</a></li>
+        </ul>
+    </nav>
+
+	<div class="container" > <!-- Tab navigation container -->
+		<div class="container-fluid">
+		<ul class="nav nav-tabs">
+			<li role="presentation" ng-class=" { active:isActive(1) } "  ng-click="changeTabValue(1)" ><a> Home </a></li>
+			<li role="presentation" ng-class="{ active:isActive(2) }" ng-click="changeTabValue(2)" > <a> Add </a> </li>
+			<li role="presentation" ng-class="{ active:isActive(3) }" ng-click="changeTabValue(3)" > <a> Details</a> </li>
+		</ul>
+		</div>
+	</div>  <!--/End Tab navigation container -->
+
+	<div class="container" > <!-- Actual Tab Contents -->
+		<div class="contailer-fluid">
+
+		<div class="jumbotron" ng-show="isActive(1)" >  <!-- FIRST TAB CONTENT-->
+			<h4 class="" > Super cool app to track expense..</h4>
+			<ul class="list-group">
+				<li> <h4 class="list-group-item" > Add button to add new expense</h4> </li>
+				<li> <h4 class="list-group-item" > Details to view the details of your expense</h4> </li>
+			<ul>
+		</div>
+
+		<div ng-show="isActive(2)"  class="panel-body" > <!-- SECOND TAB CONTENT-->
+			<form class="col-md-6 col-sm-12" name="expenseForm">
+			<div class="input-group">
+				<span class="input-group-addon" id="basic-store">Store</span>
+				<input type="text" class="form-control" aria-describedby="basic-store" name="store" placeholder="Store" ng-model="formData.store" required>
+			</div>	
+
+			<div class="input-group">
+				<span class="input-group-addon " id="basic-item">Item</span>
+				<input class="form-control" aria-describedby="basic-item" type="decimal" name="item" placeholder="Item" ng-model="formData.item" required> </input>
+			</div>
+	
+			<div class="input-group">
+				<span class="input-group-addon " id="basic-amount">Amount</span>
+				<input class="form-control" aria-describedby="basic-amount" type="number" name="amount" placeholder="Amount" ng-model="formData.amount" min="1" ng-minlength="1" ng-maxlength="5" required> </input>
+			</div>
+
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-dop">Date Of Purchase</span>
+                <input class="form-control" aria-describedby="basic-dop" type="date" name="dateofpurchase" ng-model="formData.dateofpurchase" required> </input>
+            </div>
+            <div class="input-group">
+                <input class="btn btn-default" type="submit" ng-click="createExpense()" ng-disabled="expenseForm.$invalid " >
+            </div>
+
+			</form>
+		</div>
+
+
+		<div  ng-show="isActive(3)" class="col-md-6 col-sm-12" >  <!-- THIRD TAB CONTENT-->
+			<table class="table">
+				<tr>
+					<th> Date of Purchase </th>
+					<th> Store </th>
+					<th> Item </th>
+					<th> Amount </th>
+				</tr>
+				<tr ng-repeat="expense in completeExpense">
+					<td> {{ expense.dateOfPurchase | date}} </td>
+					<td> {{ expense.store }} </td>
+					<td> {{ expense.item }} </td>
+					<td> {{ expense.amount | currency : $ : 2 }}</td> 
+				</tr>
+
+			</table>
+		</div>
+
+		</div>
+	</div> <!-- Actual Tab Contents -->
+
+</div>
+
+<hr></hr>
+</body>
+</html>
