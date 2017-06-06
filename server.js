@@ -1,6 +1,10 @@
 var express = require('express');
 const app = express();
-const port = 3014;
+//const port = 3014;
+const port = process.env.PORT;
+const dbuser = process.env.dbuser;
+const dbpass = process.env.dbpass;
+console.log("PORT is: ",port);
 
 var mongoose = require('mongoose');
 var path = require('path');
@@ -9,9 +13,9 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var dbConfig = require('./config/db');
 
-var url = dbConfig.atlastlab_url;
+var url = dbConfig.atlastlab_prefix + dbuser+":"+dbpass+dbConfig.atlastlab_postfix;
 
-console.log(url);
+//console.log(url);
 // DB CONNECT
 // Mlab 
 // Atlas Cloud DB
