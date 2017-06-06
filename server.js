@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT;
 const dbuser = process.env.dbuser;
 const dbpass = process.env.dbpass;
-console.log("PORT is: ",port);
+console.log("PORT is: ",port,"user",dbuser);
 
 var mongoose = require('mongoose');
 var path = require('path');
