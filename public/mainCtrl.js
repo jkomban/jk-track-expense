@@ -15,6 +15,7 @@ angular.module('mainCtrl', []).controller('mainController', function mainControl
 	}
 
 	$scope.changeTabValue = function (value) {
+		$scope.formData= {};
 		//	console.log("changing selected tabbe value from ", $scope.selectedTab, "to ", value);
 		$scope.selectedTab = value;
 	}
