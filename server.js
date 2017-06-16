@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT;
 const dbuser = process.env.dbuser;
 const dbpass = process.env.dbpass;
-console.log("PORT is: ",port,"user",dbuser);
+console.log("PORT is: ", port, "user", dbuser);
 
 var mongoose = require('mongoose');
 var path = require('path');
@@ -13,7 +13,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var dbConfig = require('./config/db');
 
-var url = dbConfig.atlastlab_prefix + dbuser+":"+dbpass+dbConfig.atlastlab_postfix;
+var url = dbConfig.atlastlab_prefix + dbuser + ":" + dbpass + dbConfig.atlastlab_postfix;
 
 //console.log(url);
 // DB CONNECT
@@ -24,8 +24,8 @@ mongoose.connect(url);
 
 
 
-app.use(express.static( __dirname + '/public' ) );
-app.use(express.static( __dirname + '/public/mainCtrl.js' ) );
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public/mainCtrl.js'));
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -39,76 +39,71 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // DB MODEL
 var expenseSchema = mongoose.model('expense', {
 
-		dateOfPurchase: { type: Date , default: Date.now },
-		item: { type: String , default: "NA" },
-		store: { type: String , default: "NA" },
-		amount: { type: Number , default: 0 }
-	});
+	dateOfPurchase: { type: Date, default: Date.now },
+	item: { type: String, default: "NA" },
+	store: { type: String, default: "NA" },
+	amount: { type: Number, default: 0 }
+});
 
 
 // CRUD Routes
-app.get('/jexpense/expenses', function(req,res) {
+app.get('/jexpense/expenses', function (req, res) {
 
 	console.log("Request Received here");
 
-	expenseSchema.find( function(err, dbData) {
-
-	console.log("GET",dbData);
-			if(err) res.send(err);
-			else res.json(dbData);
-		});
+	expenseSchema.find(function (err, dbData) {
+		//console.log("GET",dbData);
+		if (err) res.send(err);
+		else res.json(dbData);
 	});
+});
 
-app.post('/jexpense/expenses', function(req,res) {
+app.post('/jexpense/expenses', function (req, res) {
 
-	console.log("POST| ", req.body);
+	//console.log("POST| ", req.body);
 	expenseSchema.create(
-		{ 
-		dateOfPurchase: req.body.dateofpurchase,
-		item: req.body.item,
-		store: req.body.store,
-		amount: req.body.amount,
-		done: false
+		{
+			dateOfPurchase: req.body.dateofpurchase,
+			item: req.body.item,
+			store: req.body.store,
+			amount: req.body.amount,
+			done: false
 		}
-		, function(err, dbData){
-	
-			if(err) res.send(err);
-			
-			expenseSchema.find( function(err, dbData) {
-				if(err) 
+		, function (err, dbData) {
+
+			if (err) res.send(err);
+
+			expenseSchema.find(function (err, dbData) {
+				if (err)
 					res.send(err);
 				res.json(dbData);
-				});
-
 			});
-			
-	});
-
-app.delete('/jexpense/expenses', function(req,res) {
-
-	expenseSchema.remove( {
-			_id: req.body.expenses_id
-		}, function(err, dbData) {
-
-			if(err)
-				res.send(err);
-
-			expenseSchema.find( function(err, dbData) {
-				if(err)
-					res.send(err);
-				res.json(dbData);
-				});
 
 		});
 
+});
+
+app.delete('/jexpense/expenses', function (req, res) {
+	console.log("delete request received ",req.body._id);
+	query = { _id: req.body._id };
+	expenseSchema.remove({
+		_id: req.body._id
+	}, function (err, dbData) {
+
+		if (err)
+			res.send(err);
+		//console.log("deletion completed sucessfully")
+		res.send({ reponse: "SUCCESS" });
 	});
 
-app.get('*', function(req,res) {
+});
 
-		res.sendFile( path.resolve('./public/index.html')) ;
-	
-	});
+app.get('*', function (req, res) {
+
+	res.sendFile(path.resolve('./public/index.html'));
+
+});
 
 app.listen(port);
 
-console.log('Application server running at [ http://localhost:',port ,' ]');
+console.log('Application server running at [ http://localhost:', port, ' ]');

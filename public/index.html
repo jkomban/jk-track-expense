@@ -9,7 +9,7 @@
     <title>Track It!</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="bootstrap.min.css">  
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 	<link rel="icon" href="images/favicon.ico">
 
     <!-- JS  -->
@@ -96,12 +96,21 @@
 					<th> Store </th>
 					<th> Item </th>
 					<th> Amount </th>
+					<th> Actions </th>
 				</tr>
 				<tr ng-repeat="expense in completeExpense">
 					<td> {{ expense.dateOfPurchase | date}} </td>
 					<td> {{ expense.store }} </td>
 					<td> {{ expense.item }} </td>
 					<td> {{ expense.amount | currency : $ : 2 }}</td> 
+					<td>
+						<button type="button" class="btn btn-danger btn-xs" ng-click="deleteExpense(expense._id)" nowrap>
+							<span class="glyphicon glyphicon-trash"></span>
+						</button>
+						<button type="button" class="btn btn-warning btn-xs" ng-click="updateExpense(expense)" nowrap>
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+					</td>
 				</tr>
 
 			</table>
