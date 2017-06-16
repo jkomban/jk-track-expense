@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT;
 const dbuser = process.env.dbuser;
 const dbpass = process.env.dbpass;
-console.log("PORT is: ", port, "user", dbuser);
+//console.log("PORT is: ", port, "user", dbuser);
 
 var mongoose = require('mongoose');
 var path = require('path');
@@ -61,30 +61,39 @@ app.get('/jexpense/expenses', function (req, res) {
 app.post('/jexpense/expenses', function (req, res) {
 
 	//console.log("POST| ", req.body);
-	expenseSchema.create(
-		{
-			dateOfPurchase: req.body.dateofpurchase,
-			item: req.body.item,
-			store: req.body.store,
-			amount: req.body.amount,
-			done: false
-		}
-		, function (err, dbData) {
+	if (req.body._id === undefined) {
+		console.log("Inserting new record");
+		expenseSchema.create(
+			req.body
+			, function (err, dbData) {
 
+				if (err) res.send(err);
+
+				expenseSchema.find(function (err, dbData) {
+					if (err)
+						res.send(err);
+					res.json(dbData);
+				});
+
+			});
+	}
+	else {
+		console.log("updating new record");
+		var query = { '_id': req.body._id };
+		// console.log("The id is", query);
+		expenseSchema.findOneAndUpdate(query, req.body, { upsert: true }, function (err, doc) {
 			if (err) res.send(err);
-
 			expenseSchema.find(function (err, dbData) {
 				if (err)
 					res.send(err);
 				res.json(dbData);
 			});
-
 		});
-
+	}
 });
 
 app.delete('/jexpense/expenses', function (req, res) {
-	console.log("delete request received ",req.body._id);
+	console.log("delete request received ", req.body._id);
 	query = { _id: req.body._id };
 	expenseSchema.remove({
 		_id: req.body._id
